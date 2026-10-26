@@ -1,0 +1,76 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #10213b;
+  background: #eef5ff;
+}
+.container {
+  width: min(900px, 92%);
+  margin: 48px auto;
+}
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 36px;
+  box-shadow: 0 20px 50px rgba(16, 33, 59, 0.12);
+}
+.eyebrow {
+  color: #1677d2;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+h1 {
+  margin-bottom: 8px;
+}
+.intro {
+  color: #52637a;
+  line-height: 1.6;
+}
+label {
+  display: block;
+  margin: 28px 0 8px;
+  font-weight: 700;
+}
+textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #b9c9dc;
+  border-radius: 10px;
+  resize: vertical;
+  font: inherit;
+}
+button {
+  margin-top: 14px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 10px;
+  background: #1267c4;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.response-zone {
+  margin-top: 32px;
+  padding: 22px;
+  border-radius: 14px;
+  background: #f5f9ff;
+  min-height: 150px;
+}
+#status {
+  color: #66778d;
+}
+#answer {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+.error {
+  color: #a00022;
+}

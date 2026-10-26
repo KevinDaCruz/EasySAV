@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud Campus - Premier assistant IA</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <p class="eyebrow">Cloud Campus · Jour 2 · Séquence 3</p>
+      <h1>Mon premier assistant IA</h1>
+      <p class="intro">Saisissez une question. Le frontend l’envoie à notre API Express, qui interroge ensuite Groq.</p>
+      <form id="prompt-form">
+        <label for="prompt">Votre question</label>
+        <textarea id="prompt" rows="5" placeholder="Exemple : Explique-moi simplement ce qu’est une API." required></textarea>
+        <button type="submit">Envoyer à l’assistant</button>
+      </form>
+      <section class="response-zone" aria-live="polite">
+        <h2>Réponse</h2>
+        <p id="status">En attente d’une question…</p>
+        <div id="answer"></div>
+      </section>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
