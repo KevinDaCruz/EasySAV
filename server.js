@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 // TODO 1 : importer le SDK Groq.
+import Groq from "groq-sdk";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // TODO 2 : créer le client Groq avec process.env.GROQ_API_KEY.
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY, fetch });
 
 app.post("/api/ai/test", async (req, res) => {
   const { prompt } = req.body;
@@ -26,12 +28,18 @@ app.post("/api/ai/test", async (req, res) => {
     // - messages contient au minimum un message de rôle "user"
     // - utiliser le modèle indiqué dans .env.example
     // - récupérer completion.choices[0].message.content
+    const completion = await groq.chat.completions.create({
+      model: process.env.GROQ_MODEL || "openai/gpt-oss-20b",
+      messages: [{ role: "user", content: prompt.trim() }],
+    });
 
-    const answer = `Réponse simulée : ${prompt.trim()}`;
+    const answer = completion.choices[0].message.content;
     return res.json({ answer });
   } catch (error) {
     console.error("Erreur Groq :", error);
-    return res.status(500).json({ error: "Impossible de générer une réponse pour le moment." });
+    return res
+      .status(500)
+      .json({ error: "Impossible de générer une réponse pour le moment." });
   }
 });
 
