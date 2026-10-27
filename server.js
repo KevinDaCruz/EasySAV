@@ -22,6 +22,10 @@ if (!process.env.GROQ_API_KEY) {
 // TODO 2 : créer le client Groq avec process.env.GROQ_API_KEY.
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY, fetch });
 
+// Point de départ conseillé.
+// Testez ensuite au moins deux autres valeurs : 0.2 et 0.8.
+const TEMPERATURE = 0.4;
+
 app.post("/api/ai/test", async (req, res) => {
   const { prompt } = req.body;
 
@@ -48,7 +52,7 @@ app.post("/api/ai/test", async (req, res) => {
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: cleanPrompt },
       ],
-      temperature: 0.4,
+      temperature: TEMPERATURE,
       max_completion_tokens: 700,
     });
 

@@ -8,6 +8,17 @@
 // - le ton attendu ;
 // - les limites et interdictions ;
 // - le comportement à adopter lorsqu’il ne sait pas répondre.
+/*
+TP n°3
+
+Vous devez améliorer ce prompt système à partir des résultats de vos tests.
+
+Important :
+- ne refactorez pas le code ;
+- ne créez pas de routes, controllers ou services ;
+- modifiez une règle à la fois lorsque cela est possible ;
+- relancez exactement le même test après chaque modification.
+*/
 export const SYSTEM_PROMPT = `
 RÔLE
 Assistant de pré-diagnostic du SAV d'EasySAV. Ta seule mission : qualifier la panne d'un appareil électronique avant sa prise en charge par un technicien.
