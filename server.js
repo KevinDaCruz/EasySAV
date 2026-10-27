@@ -1,9 +1,10 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { PORT } from "./src/config/env.js";
 import aiRoutes from "./src/routes/aiRoutes.js";
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: "10kb" }));
