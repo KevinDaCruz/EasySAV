@@ -1,8 +1,10 @@
-import { MAX_PROMPT_LENGTH } from "../config/ai.js";
+import { MAX_HISTORY_EXCHANGES, MAX_PROMPT_LENGTH } from "../config/ai.js";
 import { generateAnswer } from "../services/aiService.js";
 
+const HISTORY_ROLES = ["user", "assistant"];
+
 export async function testAi(req, res) {
-  const { prompt } = req.body;
+  const { prompt, history = [] } = req.body;
 
   if (typeof prompt !== "string" || prompt.trim() === "") {
     return res.status(400).json({ error: "Le champ prompt est obligatoire." });
@@ -16,8 +18,24 @@ export async function testAi(req, res) {
     });
   }
 
+  if (!Array.isArray(history)) {
+    return res
+      .status(400)
+      .json({ error: "Le champ history doit être un tableau." });
+  }
+
+  const cleanHistory = history
+    .filter(
+      (message) =>
+        HISTORY_ROLES.includes(message?.role) &&
+        typeof message.content === "string" &&
+        message.content.trim() !== "",
+    )
+    .slice(-MAX_HISTORY_EXCHANGES * 2)
+    .map(({ role, content }) => ({ role, content: content.trim() }));
+
   try {
-    const answer = await generateAnswer(cleanPrompt);
+    const answer = await generateAnswer(cleanPrompt, cleanHistory);
 
     if (!answer) {
       return res
