@@ -5,6 +5,7 @@ import {
   TEMPERATURE,
 } from "../config/ai.js";
 import { SYSTEM_PROMPT } from "../config/systemPrompt.js";
+import { processMemory } from "./memoryService.js";
 
 const history = [];
 
@@ -17,6 +18,8 @@ function addExchange(prompt, answer) {
 }
 
 export async function generateAnswer(prompt) {
+  const { memoryContext, confirmation } = await processMemory(prompt);
+
   // TODO 3 : appeler groq.chat.completions.create().
   // - messages contient au minimum un message de rôle "user"
   // - utiliser le modèle indiqué dans .env.example
@@ -25,6 +28,7 @@ export async function generateAnswer(prompt) {
     model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
+      { role: "system", content: memoryContext },
       ...history,
       { role: "user", content: prompt },
     ],
@@ -34,9 +38,11 @@ export async function generateAnswer(prompt) {
 
   const answer = completion.choices[0]?.message?.content?.trim();
 
-  if (answer) {
-    addExchange(prompt, answer);
+  if (!answer) {
+    return answer;
   }
 
-  return answer;
+  addExchange(prompt, answer);
+
+  return confirmation ? `${confirmation}\n\n${answer}` : answer;
 }
