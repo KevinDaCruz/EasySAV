@@ -3,8 +3,6 @@ const promptInput = document.querySelector("#prompt");
 const statusElement = document.querySelector("#status");
 const answerElement = document.querySelector("#answer");
 const button = form.querySelector("button");
-const MAX_HISTORY_EXCHANGES = 5;
-const history = [];
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -21,12 +19,10 @@ form.addEventListener("submit", async (event) => {
     const response = await fetch("/api/ai/test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, history })
+      body: JSON.stringify({ prompt })
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Une erreur est survenue.");
-    history.push({ role: "user", content: prompt }, { role: "assistant", content: data.answer });
-    history.splice(0, history.length - MAX_HISTORY_EXCHANGES * 2);
     statusElement.textContent = "Réponse générée :";
     answerElement.textContent = data.answer;
   } catch (error) {
