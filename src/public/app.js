@@ -1,20 +1,65 @@
 const form = document.querySelector("#prompt-form");
 const promptInput = document.querySelector("#prompt");
-const statusElement = document.querySelector("#status");
-const answerElement = document.querySelector("#answer");
 const button = form.querySelector("button");
+const chat = document.querySelector("#chat");
+const welcome = document.querySelector("#welcome");
+const messageList = document.querySelector("#messages");
+
+const ASSISTANT_ICON = '<svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>';
+
+function scrollToBottom() {
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function createAvatar() {
+  const avatar = document.createElement("div");
+  avatar.className = "flex size-9 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-cyan-400 shadow-sm";
+  avatar.innerHTML = ASSISTANT_ICON;
+  return avatar;
+}
+
+function appendMessage(role, content) {
+  welcome.hidden = true;
+  messageList.hidden = false;
+  const row = document.createElement("div");
+  const bubble = document.createElement("div");
+  bubble.textContent = content;
+  if (role === "user") {
+    row.className = "flex justify-end";
+    bubble.className = "max-w-[85%] rounded-2xl rounded-br-md bg-blue-600 px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap text-white shadow-sm";
+    row.append(bubble);
+  } else {
+    row.className = "flex items-start gap-3";
+    bubble.className = role === "error"
+      ? "max-w-[85%] rounded-2xl rounded-tl-md border border-red-300 bg-red-50 px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap text-red-800"
+      : "max-w-[85%] rounded-2xl rounded-tl-md border border-slate-200 bg-white px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap text-slate-800 shadow-sm";
+    row.append(createAvatar(), bubble);
+  }
+  messageList.append(row);
+  scrollToBottom();
+}
+
+function showLoading() {
+  const row = document.createElement("div");
+  row.className = "flex items-start gap-3";
+  row.setAttribute("aria-label", "Génération en cours…");
+  const bubble = document.createElement("div");
+  bubble.className = "flex items-center gap-1.5 rounded-2xl rounded-tl-md border border-slate-200 bg-white px-4 py-4 shadow-sm";
+  bubble.innerHTML = '<span class="size-2 animate-bounce rounded-full bg-blue-600"></span><span class="size-2 animate-bounce rounded-full bg-blue-600 [animation-delay:150ms]"></span><span class="size-2 animate-bounce rounded-full bg-blue-600 [animation-delay:300ms]"></span>';
+  row.append(createAvatar(), bubble);
+  messageList.append(row);
+  scrollToBottom();
+  return row;
+}
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const prompt = promptInput.value.trim();
-  if (!prompt) {
-    statusElement.textContent = "Veuillez saisir une question.";
-    return;
-  }
+  if (!prompt) return;
   button.disabled = true;
-  statusElement.textContent = "Génération en cours…";
-  answerElement.textContent = "";
-  answerElement.classList.remove("error");
+  promptInput.value = "";
+  appendMessage("user", prompt);
+  const loading = showLoading();
   try {
     const response = await fetch("/api/ai/test", {
       method: "POST",
@@ -23,13 +68,13 @@ form.addEventListener("submit", async (event) => {
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Une erreur est survenue.");
-    statusElement.textContent = "Réponse générée :";
-    answerElement.textContent = data.answer;
+    loading.remove();
+    appendMessage("assistant", data.answer);
   } catch (error) {
-    statusElement.textContent = "Échec de la requête.";
-    answerElement.textContent = error.message;
-    answerElement.classList.add("error");
+    loading.remove();
+    appendMessage("error", error.message);
   } finally {
     button.disabled = false;
+    promptInput.focus();
   }
 });

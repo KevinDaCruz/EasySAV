@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build:css": "tailwindcss -i ./src/styles/tailwind.css -o ./src/public/style.css --minify",
+    "predev": "npm run build:css",
     "dev": "node --watch server.js",
     "start": "node server.js"
   },
@@ -12,5 +14,9 @@
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "groq-sdk": "^0.30.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
   }
 }
