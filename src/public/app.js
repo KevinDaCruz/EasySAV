@@ -52,6 +52,14 @@ function showLoading() {
   return row;
 }
 
+function appendSources(sources) {
+  const info = document.createElement("p");
+  info.className = "-mt-4 pl-12 text-xs text-slate-500";
+  info.textContent = `Sources : ${sources.map(({ id, title }) => `[${id}] ${title}`).join(" · ")}`;
+  messageList.append(info);
+  scrollToBottom();
+}
+
 function appendTokens(tokens) {
   const info = document.createElement("p");
   info.className = "-mt-4 pl-12 text-xs text-slate-500";
@@ -145,6 +153,7 @@ form.addEventListener("submit", async (event) => {
     if (!response.ok) throw new Error(data.error || "Une erreur est survenue.");
     loading.remove();
     appendMessage("assistant", data.answer);
+    if (data.sources?.length) appendSources(data.sources);
     if (data.tokens) appendTokens(data.tokens);
     if (data.proposal) appendProposal(data.proposal);
   } catch (error) {

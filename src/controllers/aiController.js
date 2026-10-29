@@ -18,7 +18,8 @@ export async function testAi(req, res) {
   }
 
   try {
-    const { answer, proposal, tokens } = await generateResponse(cleanPrompt);
+    const { answer, proposal, sources, tokens } =
+      await generateResponse(cleanPrompt);
 
     if (!answer) {
       return res
@@ -26,7 +27,7 @@ export async function testAi(req, res) {
         .json({ error: "Le fournisseur d’IA n’a retourné aucune réponse." });
     }
 
-    return res.json({ answer, proposal, tokens });
+    return res.json({ answer, proposal, sources, tokens });
   } catch (error) {
     console.error("Erreur Groq :", error);
 

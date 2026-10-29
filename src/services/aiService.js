@@ -25,8 +25,9 @@ const ANSWER_SCHEMA = {
         additionalProperties: false,
       },
     },
+    sources: { type: "array", items: { type: "string" } },
   },
-  required: ["answer", "memoryCandidate"],
+  required: ["answer", "memoryCandidate", "sources"],
   additionalProperties: false,
 };
 
@@ -43,20 +44,36 @@ function buildMemoryContext(memories) {
   ].join("\n");
 }
 
+function buildKnowledgeContext(passages) {
+  if (!passages.length) {
+    return "EXTRAITS DE LA BASE EASYSAV : aucun. Laisse sources vide.";
+  }
+
+  return [
+    "EXTRAITS DE LA BASE EASYSAV. Si un extrait correspond à l'appareil et à la panne du client, tes causes probables et tes vérifications viennent uniquement de cet extrait, sans en inventer d'autres, et son id va dans sources. Si aucun ne correspond, réponds avec tes consignes habituelles et laisse sources vide. N'écris jamais les id dans answer.",
+    ...passages.map(({ id, title, content }) => `[${id}] ${title} : ${content}`),
+  ].join("\n");
+}
+
 function parseStructuredAnswer(content) {
   try {
     const parsed = JSON.parse(content);
-    const { answer, memoryCandidate } = parsed.arguments ?? parsed;
+    const { answer, memoryCandidate, sources } = parsed.arguments ?? parsed;
     return {
       answer: typeof answer === "string" ? answer.trim() : "",
       memoryCandidate,
+      sources,
     };
   } catch {
-    return { answer: "", memoryCandidate: null };
+    return { answer: "", memoryCandidate: null, sources: [] };
   }
 }
 
-export async function generateStructuredAnswer(conversation, memories) {
+export async function generateStructuredAnswer(
+  conversation,
+  memories,
+  passages,
+) {
   const model = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
   let content;
   let tokens = null;
@@ -73,6 +90,7 @@ export async function generateStructuredAnswer(conversation, memories) {
         { role: "system", content: SYSTEM_PROMPT },
         { role: "system", content: MEMORY_PROMPT },
         { role: "system", content: buildMemoryContext(memories) },
+        { role: "system", content: buildKnowledgeContext(passages) },
         ...conversation,
       ],
       temperature: TEMPERATURE,

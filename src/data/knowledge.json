@@ -1,0 +1,154 @@
+[
+  {
+    "id": "KB-01",
+    "title": "Smartphone ou tablette qui ne charge plus",
+    "devices": ["smartphone", "téléphone", "portable", "iphone", "tablette", "ipad"],
+    "keywords": ["charge", "chargeur", "câble", "port", "recharge", "usb"],
+    "synonyms": ["ne charge pas", "ne se recharge pas", "reste à zéro", "bloqué à 1 %", "charge lentement", "prise usb"],
+    "content": "Causes fréquentes : câble ou chargeur défectueux, port de charge encombré par de la poussière, batterie usée. Vérifications : essayer un autre câble et une autre prise, inspecter le port à la lampe sans y insérer d'objet métallique, laisser l'appareil branché 30 minutes puis le redémarrer. Si l'appareil chauffe anormalement ou si la batterie semble gonflée, arrêter la charge et contacter le SAV."
+  },
+  {
+    "id": "KB-02",
+    "title": "Smartphone ou tablette qui ne s'allume plus",
+    "devices": ["smartphone", "téléphone", "portable", "iphone", "tablette", "ipad"],
+    "keywords": ["allume", "écran", "noir", "démarre", "bouton", "éteint"],
+    "synonyms": ["s'allume plus", "écran noir", "ne démarre pas", "reste éteint", "rien ne s'affiche"],
+    "content": "Causes fréquentes : batterie complètement vide, blocage logiciel, écran endommagé après une chute. Vérifications : laisser en charge 30 minutes avant de rallumer, forcer le redémarrage avec la combinaison de boutons indiquée par le fabricant, vérifier si l'appareil vibre ou sonne malgré l'écran noir, signe d'un écran défaillant. Une chute récente oriente vers une réparation de l'écran par le SAV."
+  },
+  {
+    "id": "KB-03",
+    "title": "Appareil en contact avec un liquide",
+    "devices": ["smartphone", "téléphone", "portable", "tablette", "casque", "écouteurs", "ordinateur", "montre"],
+    "keywords": ["eau", "liquide", "humidité", "oxydation", "mouillé", "pluie"],
+    "synonyms": ["tombé dans l'eau", "renversé dessus", "pris la pluie", "dans la baignoire", "café renversé", "tombé dans les toilettes"],
+    "content": "Ne pas allumer ni recharger l'appareil. L'éteindre s'il est allumé, l'essuyer avec un chiffon sans sèche-cheveux ni source de chaleur, et ne pas le secouer. Le riz n'est pas une solution fiable. Même si l'appareil semble fonctionner, l'oxydation peut provoquer une panne plus tard : signaler le contact avec un liquide au SAV."
+  },
+  {
+    "id": "KB-04",
+    "title": "Batterie qui se décharge trop vite",
+    "devices": ["smartphone", "téléphone", "tablette", "ordinateur", "portable", "casque"],
+    "keywords": ["batterie", "autonomie", "décharge", "pourcentage"],
+    "synonyms": ["se vide vite", "ne tient plus la charge", "autonomie faible", "perd sa batterie", "se décharge tout seul"],
+    "content": "Causes fréquentes : application qui consomme en arrière-plan, luminosité élevée, batterie vieillissante. Vérifications : consulter l'état et la consommation de la batterie dans les réglages, mettre à jour le système, fermer les applications inutilisées, réduire la luminosité. Si l'autonomie reste très faible après ces réglages, la batterie est probablement usée et doit être contrôlée par le SAV."
+  },
+  {
+    "id": "KB-05",
+    "title": "Ordinateur qui ne démarre pas",
+    "devices": ["ordinateur", "pc", "laptop", "macbook", "portable"],
+    "keywords": ["démarrage", "démarre", "allume", "bios", "alimentation", "logo"],
+    "synonyms": ["ne s'allume pas", "ne démarre plus", "écran noir au démarrage", "bip au démarrage", "bloqué sur le logo"],
+    "content": "Causes fréquentes : chargeur ou alimentation défectueux, batterie vide, blocage au démarrage du système. Vérifications : tester une autre prise et regarder le voyant du chargeur, débrancher les périphériques USB, maintenir le bouton d'alimentation 15 secondes puis relancer, noter tout message d'erreur ou bip. Ne pas ouvrir l'ordinateur : transmettre ces observations au SAV."
+  },
+  {
+    "id": "KB-06",
+    "title": "Ordinateur qui surchauffe ou ventilateur bruyant",
+    "devices": ["ordinateur", "pc", "laptop", "macbook", "portable"],
+    "keywords": ["chauffe", "surchauffe", "ventilateur", "bruit", "chaud", "aération"],
+    "synonyms": ["chauffe beaucoup", "fait du bruit", "ventilateur tourne fort", "s'éteint tout seul", "devient brûlant"],
+    "content": "Causes fréquentes : aérations obstruées, poussière, logiciel qui sollicite fortement le processeur. Vérifications : poser l'ordinateur sur une surface dure et dégagée, nettoyer les grilles d'aération de l'extérieur sans ouvrir l'appareil, fermer les programmes lourds, mettre à jour le système. Une odeur de brûlé ou des extinctions brutales répétées imposent d'arrêter l'appareil et de contacter le SAV."
+  },
+  {
+    "id": "KB-07",
+    "title": "Ordinateur lent ou messages d'erreur",
+    "devices": ["ordinateur", "pc", "laptop", "macbook", "windows"],
+    "keywords": ["lent", "lenteur", "erreur", "plantage", "bug", "mise à jour"],
+    "synonyms": ["rame", "très lent", "écran bleu", "plante", "message d'erreur", "se fige", "freeze"],
+    "content": "Causes fréquentes : mise à jour incomplète, espace disque saturé, logiciel incompatible. Vérifications : redémarrer l'ordinateur, terminer les mises à jour en attente, libérer de l'espace disque, désinstaller le dernier logiciel ajouté. Noter le texte exact des messages d'erreur : il aide le technicien à identifier la panne."
+  },
+  {
+    "id": "KB-08",
+    "title": "Téléviseur sans image",
+    "devices": ["télé", "téléviseur", "tv", "télévision"],
+    "keywords": ["image", "écran", "noir", "source", "hdmi", "signal"],
+    "synonyms": ["pas d'image", "écran noir", "le son marche mais pas l'image", "aucun signal", "image figée"],
+    "content": "Causes fréquentes : mauvaise source sélectionnée, câble HDMI débranché ou abîmé, appareil externe éteint. Vérifications : appuyer sur la touche Source de la télécommande, rebrancher le câble HDMI ou tester un autre port, vérifier que le décodeur ou la console est allumé, débrancher la TV une minute puis la rallumer. Si l'écran reste noir alors que le son fonctionne, le rétroéclairage peut être en cause : contacter le SAV."
+  },
+  {
+    "id": "KB-09",
+    "title": "Téléviseur sans son",
+    "devices": ["télé", "téléviseur", "tv", "télévision"],
+    "keywords": ["son", "audio", "volume", "muet", "enceinte", "barre"],
+    "synonyms": ["pas de son", "plus de son", "son coupé", "son faible", "aucun son"],
+    "content": "Causes fréquentes : mode muet activé, sortie audio réglée vers une barre de son ou un casque, câble audio débranché. Vérifications : vérifier le volume et la touche Muet, contrôler la sortie audio dans les réglages, débrancher temporairement la barre de son ou le casque, tester une autre chaîne ou une autre source."
+  },
+  {
+    "id": "KB-10",
+    "title": "Manette de console qui ne se connecte plus",
+    "devices": ["console", "manette", "playstation", "ps5", "ps4", "xbox", "switch"],
+    "keywords": ["manette", "connexion", "appairage", "synchronisation", "clignote"],
+    "synonyms": ["manette ne marche plus", "manette déconnectée", "ne se synchronise pas", "manette clignote", "manette ne répond plus"],
+    "content": "Causes fréquentes : manette déchargée, appairage perdu, interférences sans fil. Vérifications : recharger la manette avec le câble d'origine, la reconnecter à la console par câble USB, rapprocher la manette de la console, redémarrer complètement la console. Si une autre manette fonctionne, la manette d'origine est probablement en cause."
+  },
+  {
+    "id": "KB-11",
+    "title": "Console qui ne se connecte pas à internet",
+    "devices": ["console", "playstation", "ps5", "ps4", "xbox", "switch"],
+    "keywords": ["réseau", "internet", "wifi", "connexion", "ligne", "ethernet"],
+    "synonyms": ["pas internet", "ne se connecte pas", "jeu en ligne impossible", "déconnexions", "lag"],
+    "content": "Causes fréquentes : box ou réseau Wi-Fi instable, maintenance des services en ligne, réglages réseau incorrects. Vérifications : redémarrer la box puis la console, lancer le test de connexion de la console, rapprocher la console de la box ou utiliser un câble Ethernet, vérifier l'état des services en ligne du fabricant."
+  },
+  {
+    "id": "KB-12",
+    "title": "Casque Bluetooth qui ne s'appaire pas",
+    "devices": ["casque", "écouteurs", "airpods", "oreillettes"],
+    "keywords": ["bluetooth", "appairage", "jumelage", "connexion", "détecté"],
+    "synonyms": ["ne se connecte pas", "pas détecté", "n'apparaît pas", "se déconnecte", "ne s'appaire pas"],
+    "content": "Causes fréquentes : casque déchargé, ancien appairage en conflit, Bluetooth désactivé. Vérifications : recharger le casque, supprimer le casque de la liste Bluetooth du téléphone puis relancer l'appairage, activer le mode appairage selon la notice, réinitialiser le casque. Tester avec un autre téléphone permet de savoir si le casque est en cause."
+  },
+  {
+    "id": "KB-13",
+    "title": "Casque avec du son d'un seul côté",
+    "devices": ["casque", "écouteurs", "airpods", "oreillettes"],
+    "keywords": ["son", "côté", "gauche", "droite", "oreillette", "balance"],
+    "synonyms": ["un seul côté", "une seule oreillette", "son à gauche seulement", "son à droite seulement", "une oreillette ne marche plus"],
+    "content": "Causes fréquentes : balance audio décentrée, oreillette déchargée ou désappairée, câble ou prise abîmés pour un casque filaire. Vérifications : contrôler la balance audio dans les réglages d'accessibilité, recharger les deux oreillettes, réinitialiser l'appairage, tester sur un autre appareil. Si le problème persiste sur plusieurs appareils, le casque doit être vu par le SAV."
+  },
+  {
+    "id": "KB-14",
+    "title": "Lave-linge qui ne vidange pas",
+    "devices": ["lave-linge", "machine à laver", "lave linge"],
+    "keywords": ["vidange", "eau", "filtre", "tuyau", "pompe", "essorage"],
+    "synonyms": ["ne vidange plus", "reste plein d'eau", "eau stagnante", "ne vide pas", "ne s'essore pas"],
+    "content": "Causes fréquentes : filtre de vidange encrassé, tuyau d'évacuation plié ou bouché, pompe bloquée par un objet. Vérifications : débrancher l'appareil, nettoyer le filtre de vidange accessible en façade en prévoyant un récipient pour l'eau, vérifier que le tuyau n'est pas plié, relancer un programme de vidange seule. Si la pompe fait du bruit sans vidanger, contacter le SAV."
+  },
+  {
+    "id": "KB-15",
+    "title": "Réfrigérateur bruyant ou qui ne refroidit plus",
+    "devices": ["frigo", "réfrigérateur", "congélateur", "frigidaire"],
+    "keywords": ["froid", "température", "bruit", "compresseur", "givre", "thermostat"],
+    "synonyms": ["fait du bruit", "bruit bizarre", "ne refroidit plus", "ne fait plus de froid", "trop de givre", "vibre"],
+    "content": "Causes fréquentes : appareil mal calé ou touchant le mur, grille arrière encrassée, porte mal fermée, givre excessif. Vérifications : vérifier que l'appareil est de niveau et à quelques centimètres du mur, dépoussiérer la grille arrière après l'avoir débranché, contrôler le joint de porte et le réglage du thermostat. Un bruit fort et continu ou une perte de froid durable nécessite le SAV."
+  },
+  {
+    "id": "KB-16",
+    "title": "Électroménager connecté qui perd le Wi-Fi",
+    "devices": ["électroménager", "lave-linge", "frigo", "four", "aspirateur", "robot"],
+    "keywords": ["wifi", "application", "appli", "connexion", "réseau", "connecté"],
+    "synonyms": ["appli ne trouve pas", "hors ligne", "perd le wifi", "ne se connecte pas à l'appli", "déconnecté de l'application"],
+    "content": "Causes fréquentes : changement de box ou de mot de passe Wi-Fi, appareil trop éloigné de la box, application non mise à jour. Vérifications : vérifier que la box fonctionne, mettre à jour l'application, rapprocher la box si possible, relancer l'association de l'appareil depuis l'application selon la notice. Ne jamais communiquer son mot de passe Wi-Fi à l'assistant."
+  },
+  {
+    "id": "KB-17",
+    "title": "Climatiseur qui ne refroidit plus",
+    "devices": ["clim", "climatiseur", "climatisation"],
+    "keywords": ["froid", "filtre", "télécommande", "mode", "température", "fuite"],
+    "synonyms": ["ne refroidit plus", "souffle chaud", "ne fait plus de froid", "coule", "goutte"],
+    "content": "Causes fréquentes : filtres encrassés, mode ou température mal réglés, unité extérieure obstruée. Vérifications : vérifier le mode Froid et la température demandée sur la télécommande, changer les piles de la télécommande, nettoyer les filtres selon la notice après avoir coupé l'appareil, dégager l'unité extérieure. Une fuite d'eau importante ou l'absence totale de froid nécessite une intervention du SAV."
+  },
+  {
+    "id": "KB-18",
+    "title": "Danger : batterie gonflée, fumée ou odeur de brûlé",
+    "devices": ["smartphone", "téléphone", "tablette", "ordinateur", "casque", "console", "batterie"],
+    "keywords": ["gonflée", "gonflé", "fumée", "brûlé", "étincelles", "danger", "explose"],
+    "synonyms": ["batterie gonflée", "odeur de brûlé", "fait des étincelles", "de la fumée", "chauffe énormément", "a gonflé"],
+    "content": "Situation dangereuse : éteindre l'appareil, le débrancher, ne plus l'utiliser ni le recharger. Ne pas percer, presser ni retirer la batterie. Éloigner l'appareil de tout matériau inflammable et le poser sur une surface non combustible. Contacter ensuite le SAV pour organiser la prise en charge."
+  },
+  {
+    "id": "KB-19",
+    "title": "Préparer sa demande au SAV",
+    "devices": [],
+    "keywords": ["sav", "demande", "commande", "technicien", "réparation", "dossier"],
+    "synonyms": ["contacter le sav", "envoyer en réparation", "faire une demande", "numéro de commande", "prise en charge"],
+    "content": "Pour accélérer la prise en charge, préparer : le modèle exact de l'appareil, le numéro de commande, une description de la panne avec la date d'apparition et l'événement déclencheur, ainsi que les vérifications déjà effectuées et leur résultat. Une photo du problème peut aussi aider le technicien."
+  }
+]
