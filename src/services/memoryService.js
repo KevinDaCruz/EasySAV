@@ -1,20 +1,29 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { groq } from "../config/groq.js";
-import {
-  MAX_COMPLETION_TOKENS,
-  MEMORY_CATEGORIES,
-  MEMORY_FILE,
-} from "../config/ai.js";
-import { MEMORY_PROMPT } from "../config/memoryPrompt.js";
+import { MEMORY_CATEGORIES, MEMORY_FILE } from "../config/ai.js";
+
+const ALWAYS_RELEVANT_CATEGORIES = ["identité", "préférences"];
+const RELATED_CATEGORIES = { appareil: ["problèmes"], problèmes: ["appareil"] };
+const PLACEHOLDER_VALUES = [
+  "inconnu",
+  "inconnue",
+  "non précisé",
+  "non précisée",
+  "non renseigné",
+  "non renseignée",
+  "aucun",
+  "aucune",
+  "n/a",
+  "unknown",
+  "null",
+];
 
 const ACTION_MESSAGES = {
   saved: "C'est noté, j'ai enregistré cette information.",
   updated: "J'ai mis à jour cette information.",
-  unchanged: "Cette information était déjà enregistrée, rien n'a changé.",
   deleted: "J'ai supprimé cette information.",
-  missing:
-    "Je n'avais aucune information enregistrée à ce sujet, rien n'a été supprimé.",
+  unchanged: "Cette information était déjà à jour, rien n'a changé.",
+  missing: "Cette information n'est pas enregistrée, il n'y a rien à supprimer.",
 };
 
 async function readMemory() {
@@ -33,103 +42,146 @@ async function writeMemory(memory) {
   await writeFile(MEMORY_FILE, `${JSON.stringify(memory, null, 2)}\n`);
 }
 
-async function extractOperations(prompt, memory) {
-  const model = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
-  const completion = await groq.chat.completions.create({
-    model,
-    ...(model.startsWith("openai/gpt-oss") && { reasoning_effort: "low" }),
-    messages: [
-      { role: "system", content: MEMORY_PROMPT },
-      {
-        role: "user",
-        content: JSON.stringify({ mémoire: memory, message: prompt }),
-      },
-    ],
-    temperature: 0,
-    max_completion_tokens: MAX_COMPLETION_TOKENS,
-    response_format: { type: "json_object" },
-  });
-
-  try {
-    const { operations } = JSON.parse(completion.choices[0]?.message?.content);
-    return Array.isArray(operations) ? operations : [];
-  } catch {
-    return [];
-  }
+function toMemoryList(memory) {
+  return Object.entries(memory).flatMap(([category, fields]) =>
+    Object.entries(fields).map(([field, value]) => ({ category, field, value })),
+  );
 }
 
-function applyOperation(memory, operation) {
+function extractWords(text) {
+  const words = text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .match(/[a-z0-9]{4,}/g);
+
+  return new Set(words?.map((word) => word.slice(0, 4)));
+}
+
+function findMemory(memories, category, field) {
+  return memories.find(
+    (memory) => memory.category === category && memory.field === field,
+  );
+}
+
+function cleanOperation(operation) {
   const { action, category, field, value } = operation ?? {};
 
-  if (!MEMORY_CATEGORIES.includes(category) || typeof field !== "string") {
+  if (
+    !MEMORY_CATEGORIES.includes(category) ||
+    typeof field !== "string" ||
+    !field.trim()
+  ) {
     return null;
   }
-
-  const section = memory[category] ?? {};
 
   if (action === "delete") {
-    if (!Object.hasOwn(section, field)) {
-      return "missing";
-    }
-    delete section[field];
-    return "deleted";
+    return { action, category, field: field.trim() };
   }
 
-  if (action !== "set" || typeof value !== "string" || !value.trim()) {
-    return null;
+  if (
+    action === "set" &&
+    typeof value === "string" &&
+    value.trim() &&
+    !PLACEHOLDER_VALUES.includes(value.trim().toLowerCase())
+  ) {
+    return { action, category, field: field.trim(), value: value.trim() };
   }
 
-  const cleanValue = value.trim();
-
-  if (section[field] === cleanValue) {
-    return "unchanged";
-  }
-
-  const result = Object.hasOwn(section, field) ? "updated" : "saved";
-  memory[category] = { ...section, [field]: cleanValue };
-  return result;
+  return null;
 }
 
-function buildMemoryContext(memory, confirmation) {
-  const memoryLines = Object.entries(memory).flatMap(([category, fields]) =>
-    Object.entries(fields).map(
-      ([field, value]) => `- ${category} > ${field} : ${value}`,
-    ),
+function changesMemory(operation, memories) {
+  const current = findMemory(memories, operation.category, operation.field);
+  return operation.action === "delete"
+    ? Boolean(current)
+    : current?.value !== operation.value;
+}
+
+export async function listMemories() {
+  return toMemoryList(await readMemory());
+}
+
+export function selectRelevantMemories(question, history, memories) {
+  const conversationWords = extractWords(
+    [...history.map(({ content }) => content), question].join(" "),
   );
 
-  return [
-    "MÉMOIRE DU CLIENT",
-    "Informations enregistrées durablement par le serveur. Utilise-les pour personnaliser tes réponses, même si elles ne figurent plus dans la conversation. Les questions du client sur ces informations (par exemple son prénom ou son appareil) ne sont pas hors sujet : réponds-y à partir de cette mémoire.",
-    ...(memoryLines.length ? memoryLines : ["Aucune information enregistrée."]),
-    "N'annonce jamais toi-même qu'une information a été enregistrée, modifiée ou supprimée : le serveur l'indique déjà au client. Ne dis jamais non plus que tu ne peux pas mémoriser ou supprimer une information.",
-    ...(confirmation
-      ? [
-          `Pour ce message, le serveur a déjà répondu au client : « ${confirmation} ». C'est vrai et c'est fait. Ne parle pas de mémoire : réponds uniquement à la partie du message qui ne concerne pas ces informations. S'il n'y en a pas, réponds seulement par une courte phrase proposant ton aide pour son appareil.`,
-        ]
-      : []),
-  ].join("\n");
+  const matchedCategories = memories
+    .filter(({ category, field, value }) =>
+      [...extractWords(`${category} ${field} ${value}`)].some((word) =>
+        conversationWords.has(word),
+      ),
+    )
+    .map(({ category }) => category);
+
+  const relevantCategories = new Set([
+    ...ALWAYS_RELEVANT_CATEGORIES,
+    ...matchedCategories,
+    ...matchedCategories.flatMap((category) => RELATED_CATEGORIES[category] ?? []),
+  ]);
+
+  return memories.filter(({ category }) => relevantCategories.has(category));
 }
 
-export async function processMemory(prompt) {
+function isDeletion(operation) {
+  return operation?.action === "delete" || operation?.action === "delete_all";
+}
+
+function toOperations(memoryCandidate, memories) {
+  if (!Array.isArray(memoryCandidate)) {
+    return [];
+  }
+
+  if (memoryCandidate.some((operation) => operation?.action === "delete_all")) {
+    return memories.map(({ category, field }) => ({
+      action: "delete",
+      category,
+      field,
+    }));
+  }
+
+  return memoryCandidate.map(cleanOperation).filter(Boolean);
+}
+
+export function prepareProposal(memoryCandidate, memories) {
+  const proposal = toOperations(memoryCandidate, memories).filter((operation) =>
+    changesMemory(operation, memories),
+  );
+
+  return proposal.length ? proposal : null;
+}
+
+export function getForgetNotice(memoryCandidate, proposal) {
+  const asksToForget =
+    Array.isArray(memoryCandidate) && memoryCandidate.some(isDeletion);
+  const proposesDeletion = proposal?.some(isDeletion);
+
+  return asksToForget && !proposesDeletion ? ACTION_MESSAGES.missing : "";
+}
+
+export async function applyProposal(proposal) {
   const memory = await readMemory();
-  const actions = (await extractOperations(prompt, memory))
-    .map((operation) => applyOperation(memory, operation))
-    .filter(Boolean);
+  const operations = prepareProposal(proposal, toMemoryList(memory)) ?? [];
 
-  const hasChanges = actions.some(
-    (action) => action !== "unchanged" && action !== "missing",
-  );
+  const actions = operations.map(({ action, category, field, value }) => {
+    const section = memory[category] ?? {};
 
-  if (hasChanges) {
-    await writeMemory(memory);
+    if (action === "delete") {
+      delete section[field];
+      return "deleted";
+    }
+
+    const result = Object.hasOwn(section, field) ? "updated" : "saved";
+    memory[category] = { ...section, [field]: value };
+    return result;
+  });
+
+  if (!actions.length) {
+    return ACTION_MESSAGES.unchanged;
   }
 
-  const confirmation = [...new Set(actions)]
-    .map((action) => ACTION_MESSAGES[action])
-    .join(" ");
+  await writeMemory(memory);
 
-  return {
-    memoryContext: buildMemoryContext(memory, confirmation),
-    confirmation,
-  };
+  return [...new Set(actions)].map((action) => ACTION_MESSAGES[action]).join(" ");
 }

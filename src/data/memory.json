@@ -1,5 +1,14 @@
 {
-  "identité": {},
-  "appareil": {},
-  "problèmes": {}
+  "identité": {
+    "nom": "Kevin"
+  },
+  "appareil": {
+    "type": "casque bluetooth",
+    "catégorie": "image et son",
+    "marque": "Apple",
+    "modèle": "Air Pods Max"
+  },
+  "problèmes": {
+    "souci": "déconnexion fréquente"
+  }
 }

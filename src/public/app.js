@@ -52,6 +52,81 @@ function showLoading() {
   return row;
 }
 
+function appendTokens(tokens) {
+  const info = document.createElement("p");
+  info.className = "-mt-4 pl-12 text-xs text-slate-500";
+  info.textContent = `${tokens.toLocaleString("fr-FR")} tokens consommés`;
+  messageList.append(info);
+  scrollToBottom();
+}
+
+function describeOperation({ action, category, field, value }) {
+  return action === "delete"
+    ? `Oublier : ${category} > ${field}`
+    : `Retenir : ${category} > ${field} : ${value}`;
+}
+
+function appendProposal(proposal) {
+  const row = document.createElement("div");
+  row.className = "pl-12";
+  const card = document.createElement("div");
+  card.className = "max-w-[85%] rounded-2xl border border-cyan-300 bg-cyan-50 px-4 py-3 text-[15px] leading-relaxed text-slate-800";
+  const title = document.createElement("p");
+  title.className = "font-semibold text-slate-900";
+  title.textContent = "Voulez-vous mettre à jour votre fiche client ?";
+  const list = document.createElement("ul");
+  list.className = "mt-2 space-y-1";
+  for (const operation of proposal) {
+    const item = document.createElement("li");
+    item.textContent = describeOperation(operation);
+    list.append(item);
+  }
+  const actions = document.createElement("div");
+  actions.className = "mt-3 flex gap-2";
+  const accept = document.createElement("button");
+  accept.type = "button";
+  accept.textContent = "Oui";
+  accept.className = "rounded-lg bg-blue-600 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-600";
+  const refuse = document.createElement("button");
+  refuse.type = "button";
+  refuse.textContent = "Non";
+  refuse.className = "rounded-lg border border-slate-300 bg-white px-4 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:text-slate-400";
+  accept.addEventListener("click", async () => {
+    accept.disabled = true;
+    refuse.disabled = true;
+    try {
+      const response = await fetch("/api/ai/memory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ proposal })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Une erreur est survenue.");
+      row.remove();
+      appendMessage("assistant", data.message);
+    } catch (error) {
+      accept.disabled = false;
+      refuse.disabled = false;
+      appendMessage("error", error.message);
+    }
+  });
+  refuse.addEventListener("click", () => {
+    row.remove();
+    appendMessage("assistant", "D'accord, je n'ai rien modifié dans votre fiche.");
+  });
+  actions.append(accept, refuse);
+  card.append(title, list, actions);
+  row.append(card);
+  messageList.append(row);
+  scrollToBottom();
+}
+
+promptInput.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+  event.preventDefault();
+  if (!button.disabled) form.requestSubmit();
+});
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const prompt = promptInput.value.trim();
@@ -70,6 +145,8 @@ form.addEventListener("submit", async (event) => {
     if (!response.ok) throw new Error(data.error || "Une erreur est survenue.");
     loading.remove();
     appendMessage("assistant", data.answer);
+    if (data.tokens) appendTokens(data.tokens);
+    if (data.proposal) appendProposal(data.proposal);
   } catch (error) {
     loading.remove();
     appendMessage("error", error.message);

@@ -1,5 +1,6 @@
 import { MAX_PROMPT_LENGTH } from "../config/ai.js";
-import { generateAnswer } from "../services/aiService.js";
+import { applyProposal } from "../services/memoryService.js";
+import { generateResponse } from "../services/responseService.js";
 
 export async function testAi(req, res) {
   const { prompt } = req.body;
@@ -17,7 +18,7 @@ export async function testAi(req, res) {
   }
 
   try {
-    const answer = await generateAnswer(cleanPrompt);
+    const { answer, proposal, tokens } = await generateResponse(cleanPrompt);
 
     if (!answer) {
       return res
@@ -25,7 +26,7 @@ export async function testAi(req, res) {
         .json({ error: "Le fournisseur d’IA n’a retourné aucune réponse." });
     }
 
-    return res.json({ answer });
+    return res.json({ answer, proposal, tokens });
   } catch (error) {
     console.error("Erreur Groq :", error);
 
@@ -36,5 +37,23 @@ export async function testAi(req, res) {
         : "Impossible de générer une réponse pour le moment.";
 
     return res.status(status).json({ error: message });
+  }
+}
+
+export async function saveMemory(req, res) {
+  const { proposal } = req.body;
+
+  if (!Array.isArray(proposal)) {
+    return res.status(400).json({ error: "Le champ proposal est obligatoire." });
+  }
+
+  try {
+    const message = await applyProposal(proposal);
+    return res.json({ message });
+  } catch (error) {
+    console.error("Erreur mémoire :", error);
+    return res
+      .status(500)
+      .json({ error: "Impossible d'enregistrer ces informations pour le moment." });
   }
 }
