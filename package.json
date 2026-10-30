@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:css": "tailwindcss -i ./src/styles/tailwind.css -o ./src/public/style.css --minify",
+    "build:css": "tailwindcss -i ./src/styles/tailwind.css -o ./src/public/style.css",
     "predev": "npm run build:css",
     "dev": "node --watch server.js",
     "start": "node server.js"

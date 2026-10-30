@@ -13,7 +13,7 @@ function scrollToBottom() {
 
 function createAvatar() {
   const avatar = document.createElement("div");
-  avatar.className = "flex size-9 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-cyan-400 shadow-sm";
+  avatar.className = "flex size-9 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-cyan-400 soft-shadow";
   avatar.innerHTML = ASSISTANT_ICON;
   return avatar;
 }
@@ -26,13 +26,13 @@ function appendMessage(role, content) {
   bubble.textContent = content;
   if (role === "user") {
     row.className = "flex justify-end";
-    bubble.className = "max-w-[85%] rounded-2xl rounded-br-md bg-blue-600 px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap text-white shadow-sm";
+    bubble.className = "max-w-[85%] rounded-2xl rounded-br-md bg-blue-600 px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap text-white soft-shadow";
     row.append(bubble);
   } else {
     row.className = "flex items-start gap-3";
     bubble.className = role === "error"
       ? "max-w-[85%] rounded-2xl rounded-tl-md border border-red-300 bg-red-50 px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap text-red-800"
-      : "max-w-[85%] rounded-2xl rounded-tl-md border border-slate-200 bg-white px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap text-slate-800 shadow-sm";
+      : "max-w-[85%] rounded-2xl rounded-tl-md border border-slate-200 bg-white px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap text-slate-800 soft-shadow";
     row.append(createAvatar(), bubble);
   }
   messageList.append(row);
@@ -44,7 +44,7 @@ function showLoading() {
   row.className = "flex items-start gap-3";
   row.setAttribute("aria-label", "Génération en cours…");
   const bubble = document.createElement("div");
-  bubble.className = "flex items-center gap-1.5 rounded-2xl rounded-tl-md border border-slate-200 bg-white px-4 py-4 shadow-sm";
+  bubble.className = "flex items-center gap-1.5 rounded-2xl rounded-tl-md border border-slate-200 bg-white px-4 py-4 soft-shadow";
   bubble.innerHTML = '<span class="size-2 animate-bounce rounded-full bg-blue-600"></span><span class="size-2 animate-bounce rounded-full bg-blue-600 [animation-delay:150ms]"></span><span class="size-2 animate-bounce rounded-full bg-blue-600 [animation-delay:300ms]"></span>';
   row.append(createAvatar(), bubble);
   messageList.append(row);
